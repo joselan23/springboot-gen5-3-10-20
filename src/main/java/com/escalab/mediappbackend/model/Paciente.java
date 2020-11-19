@@ -9,14 +9,20 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(description = "Información o propiedes del paciente")
 @Entity
 @Table(name = "paciente")
 public class Paciente {
+	
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer idPaciente;
 	
+	@ApiModelProperty(notes = "Nombre dene tener como minimo 3 caracteres")
 	@Size(min = 3, message = "Nombres debe tener minimo 3 caracteres")
 	@Column(name = "nombres", nullable = false, length = 70)
 	private String nombres;
@@ -41,7 +47,6 @@ public class Paciente {
 	@Email
 	@Column(name = "email", nullable = true, length = 55)
 	private String email;
-
 
 	public Integer getIdPaciente() {
 		return idPaciente;

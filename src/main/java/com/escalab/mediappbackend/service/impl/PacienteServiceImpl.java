@@ -4,57 +4,49 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.escalab.mediappbackend.model.Paciente;
-import com.escalab.mediappbackend.repo.PacienteRepoInterface;
-import com.escalab.mediappbackend.service.PacienteService;
+import com.escalab.mediappbackend.repo.IPacienteRepo;
+import com.escalab.mediappbackend.service.IPacienteService;
 
 @Service
-public class PacienteServiceImpl implements PacienteService {
+public class PacienteServiceImpl implements IPacienteService {
 	
 	@Autowired
-	private PacienteRepoInterface repoInterface;
-
+	private IPacienteRepo repo;
+	
 	@Override
-	public List<Paciente> getAll() {
-		List<Paciente> pacientes = repoInterface.findAll();
-
-		pacientes.forEach((p)-> {
-			System.out.print(p.toString());
-		});
-		
-		return pacientes;
-	}
-
-	@Override
-	public Paciente save(Paciente paciente) {
-		return repoInterface.save(paciente);
-	}
-
-	@Override
-	public Paciente findById(Integer id) {
-		// TODO Auto-generated method stub
-		Optional<Paciente> paciente = repoInterface.findById(id);
-		if(paciente.isPresent()) {
-			return paciente.get();
-		}else {
-			return new Paciente();
-		}
-	}
-
-	@Override
-	public Paciente update(Paciente paciente) {
-		// TODO Auto-generated method stub
-		return repoInterface.save(paciente);
-	}
-
-	@Override
-	public Boolean delete(Integer id) {
-		// TODO Auto-generated method stub
-		repoInterface.deleteById(id);
-		return true;
+	public Paciente registrar(Paciente pac) {
+		return repo.save(pac);
 	}
 	
-
+	@Override
+	public Paciente modificar(Paciente pac) {
+		return repo.save(pac);
+	}
+	
+	@Override 
+	public List<Paciente> listar() {
+		return repo.findAll();
+	}
+	
+	@Override
+	public Page<Paciente> listarPageable(Pageable pageable) {
+		return repo.findAll(pageable);
+	}
+	
+	@Override
+	public Paciente leerPorId(Integer id) {
+		Optional<Paciente> op = repo.findById(id);
+		return op.isPresent() ? op.get() : new Paciente(); 
+	}
+	
+	@Override
+	public boolean eliminar(Integer id) {
+		repo.deleteById(id);
+		return true;
+	}
 }
